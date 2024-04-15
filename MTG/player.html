@@ -56,23 +56,40 @@
                 align-items: center;
             }
         }
+
+        #mask {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            color: white;
+            font-size: 72px;
+            position: absolute;
+            transition: all .5s;
+            align-items: center;
+            justify-content: center;
+            background-color: black;
+        }
     </style>
 </head>
 
 <body>
-    <div id="scene"></div>
+    <div id="scene" style="position: relative;">
+        <div id="mask">Loading...</div>
+    </div>
     <div id="footer">
         <input id="sceneId" type="text" placeholder="MSceneId">
-        <button id="btn" onclick="shift()">Get</button>
-        <button onclick="play(1)">animation1</button>
-        <button onclick="play(2)">animation2</button>
-        <button onclick="play(3)">animation3</button>
-        <button onclick="play(4)">animation4</button>
-        <button onclick="toggle()">Pause</button>
+        <button id="btn" onclick="getScene()">Get</button>
+        <button onclick="play('animation1')">animation1</button>
+        <button onclick="play('animation2')">animation2</button>
+        <button onclick="play('animation3')">animation3</button>
+        <button onclick="play('animation4')">animation4</button>
+        <button onclick="pause()">Pause</button>
     </div>
     <script>
         var currentId = null
         var btn = document.getElementById('btn')
+        var mask = document.getElementById('mask')
+        var scene = document.getElementById('scene')
         var sceneId = document.getElementById('sceneId')
         var baseUrl = 'https://assets4.mist-train-girls.com/production-client-web-assets/Spines/Stills'
         var app = new PIXI.Application({
@@ -82,7 +99,9 @@
             transparent: true,
             backgroundColor: 0x000000
         });
-        document.getElementById('scene').appendChild(app.view);
+        scene.style.width = app.renderer.width + 'px'
+        scene.style.height = app.renderer.height + 'px'
+        scene.appendChild(app.view);
         to(219640107)
 
         function load(app, files) {
@@ -107,10 +126,12 @@
                             app.stage.addChild(animation);
                         }
                     }
-                    btn.disabled = false
+                    setTimeout(() => {
+                        btn.disabled = false
+                        mask.style.opacity = 0
+                    }, 500)
                 });
         }
-
 
         function to(id) {
             btn.disabled = true
@@ -124,6 +145,7 @@
                     currentId = id
                     let data = xhr.response;
                     files = data.Parts.map(part => `${baseUrl}/${baseId}/${id}/${part.Path}.skel`)
+                    mask.style.opacity = 1
                     load(app, files)
                 } else {
                     alert('Error')
@@ -137,15 +159,15 @@
             xhr.send();
         }
 
-        function play(index) {
-            app && app.stage.children.forEach(a => a.state.setAnimation(0, `animation${index}`, true))
+        function play(animation) {
+            app && app.stage.children.forEach(a => a.state.setAnimation(0, animation, true))
         }
 
-        function toggle() {
+        function pause() {
             app && app.stage.children.forEach(a => a.state.timeScale = a.state.timeScale ? 0 : 1)
         }
 
-        function shift() {
+        function getScene() {
             sid = sceneId.value
             sid.trim() && sid != currentId && to(sid)
         }
