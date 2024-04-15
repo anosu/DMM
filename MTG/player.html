@@ -130,6 +130,10 @@
                     btn.disabled = false
                 }
             };
+            xhr.onerror = function () {
+                alert('Error')
+                btn.disabled = false
+            }
             xhr.send();
         }
 
