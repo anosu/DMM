@@ -148,12 +148,12 @@
                     mask.style.opacity = 1
                     load(app, files)
                 } else {
-                    alert('Error')
+                    alert('Invalid MSceneId')
                     btn.disabled = false
                 }
             };
             xhr.onerror = function () {
-                alert('Error')
+                alert('Network Error')
                 btn.disabled = false
             }
             xhr.send();
