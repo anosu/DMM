@@ -119,8 +119,8 @@
                             animation.position.set(app.renderer.width / 2, app.renderer.height / 2)
                             if (window.innerWidth < 1280) {
                                 let ratio = window.innerWidth / 1280
-                                animation.width *= ratio
-                                animation.height *= ratio
+                                animation.scale.x = ratio
+                                animation.scale.y = ratio
                             }
                             animation.autoUpdate = true;
                             app.stage.addChild(animation);
