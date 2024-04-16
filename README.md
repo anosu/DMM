@@ -4,6 +4,8 @@
 
 地址：[dmm.ntr.best/MTG/player](//dmm.ntr.best/MTG/player)
 
+支持拖动、缩放和动画播放
+
 需要输入寝室id，由5个部分组成:
 
 - 固定开头：2
