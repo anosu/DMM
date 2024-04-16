@@ -2,7 +2,7 @@
 
 #### 雾车寝室预览
 
-地址：[dmm.ntr.best/MTG/player](dmm.ntr.best/MTG/player)
+地址：[dmm.ntr.best/MTG/player](//dmm.ntr.best/MTG/player)
 
 需要输入寝室id，由5个部分组成:
 
