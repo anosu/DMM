@@ -198,8 +198,8 @@
             entity.scale.x = Math.max(originalScaleX * scaleFactor, minScale);
             entity.scale.y = Math.max(originalScaleY * scaleFactor, minScale);
 
-            entity.position.x -= (event.offsetX - entity.x) * (entity.scale.x / originalScaleX - 1);
-            entity.position.y -= (event.offsetY - entity.y) * (entity.scale.y / originalScaleY - 1);
+            entity.x -= (event.offsetX - entity.x) * (entity.scale.x / originalScaleX - 1);
+            entity.y -= (event.offsetY - entity.y) * (entity.scale.y / originalScaleY - 1);
         }
 
         function decorate(spineObject) {
@@ -231,6 +231,33 @@
 
             app.view.addEventListener('wheel', (event) => {
                 mouseScale(event, spineObject)
+            });
+
+            let initialDistance, initialScale;
+            app.view.addEventListener('touchstart', (event) => {
+                if (event.touches.length === 2) {
+                    initialDistance = Math.hypot(
+                        event.touches[0].pageX - event.touches[1].pageX,
+                        event.touches[0].pageY - event.touches[1].pageY
+                    );
+                    initialScale = spineObject.scale.x
+                }
+            });
+            app.view.addEventListener('touchmove', (event) => {
+                if (event.touches.length === 2) {
+                    const originalScaleX = spineObject.scale.x;
+                    const originalScaleY = spineObject.scale.y;
+                    const centerX = (event.touches[0].pageX + event.touches[1].pageX) / 2
+                    const centerY = (event.touches[0].pageY + event.touches[1].pageY) / 2
+                    const currentDistance = Math.hypot(
+                        event.touches[0].pageX - event.touches[1].pageX,
+                        event.touches[0].pageY - event.touches[1].pageY
+                    );
+                    spineObject.scale.x = spineObject.scale.y = currentDistance / initialDistance * initialScale;
+                    spineObject.x -= (centerX - spineObject.x) * (spineObject.scale.x / originalScaleX - 1);
+                    spineObject.y -= (centerY - spineObject.y) * (spineObject.scale.y / originalScaleY - 1);
+
+                }
             });
 
             return spineObject
